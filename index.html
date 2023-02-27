@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>고양이 가라사대</title>
+  </head>
+  <style>
+    body {
+      text-align: center;
+    }
+    .main-card button {
+      position: relative;
+      left: -45px;
+      bottom: 15px;
+    }
+    .favorites {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .favorites img {
+      width: 150px;
+    }
+    form{
+      margin-bottom: 20px;
+    }
+  </style>
+  <body>
+     
+    <div id="app"></div>
+
+
+     <!-- React를 실행. -->
+    <!-- 주의: 사이트를 배포할 때는 "development.js"를 "production.min.js"로 대체하세요. -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+    
+    
+     const Title= (props)=>(
+        <h1>{props.children}</h1>
+     )
+
+
+    const Form=()=>{
+      function handleFormSubmit(e){
+        e.preventDefault();
+        console.log("폼 전송 됨");
+      }
+
+        return (
+          <form onSubmit={handleFormSubmit}>
+            <input type="text" name="name" placeholder="영어 대사를 입력해주세요" />
+            <button type="submit">생성</button>
+          </form>
+        );
+    }
+ 
+      const MainCard=({src,alt,width })=>{
+        function handleHeartClick(){
+          console.log("하트 눌렀음");
+        }
+        function handleHeartMouseOver(){
+          console.log("하트 스쳐 지나감");
+        }
+
+        return  (
+          <div className="main-card">
+          <img
+            src={src}
+            alt={alt}
+            width={width}
+          />
+          <button onClick={handleHeartClick}
+            onMouseOver={handleHeartMouseOver}
+          >🤍</button>
+        </div>
+        );
+      }
+
+      function CatItem(props){
+        return (
+             <li>
+               <img src={props.img} style={{width:"150px"}} />
+              </li>
+        );
+      }
+
+      function Favorites(){
+         return (
+            <ul className="favorites">
+              <CatItem img="http://placeimg.com/640/480/arch"  title="cat1" />
+              <CatItem img="http://placeimg.com/640/480/nature" title="cat2" />
+              <CatItem  img="http://placeimg.com/640/480/animals" title="cat3"/>
+          </ul>
+         )
+      }
+      
+      
+      const app=(
+        <div>
+          <Title>1번째 고양이 가라사대</Title>,
+          <Form />
+          <MainCard src="https://source.unsplash.com/random"   alt="alt"   width="400" />
+          <Favorites  />
+        </div>
+      )
+      const 여기다가그려=document.querySelector("#app");
+       ReactDOM.createRoot(여기다가그려).render(app);
+    </script>
+
+  </body>
+</html>
