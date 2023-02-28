@@ -39,9 +39,19 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="./utils.js"></script>
+    
     <script type="text/babel">
-    
-    
+    const mainImageSrcArr = [ "https://cataas.com/cat/HSENVDU4ZMqy7KQ0/says/react",
+        "https://cataas.com/cat/BxqL2EjFmtxDkAm2/says/inflearn",
+        "https://cataas.com/cat/18MD6byVC1yKGpXp/says/JavaScript",
+        "https://source.unsplash.com/random",
+        "http://placeimg.com/640/480/arch",
+        "http://placeimg.com/640/480/nature",
+        "http://placeimg.com/640/480/animals"
+    ]
+  
+ 
      const Title= (props)=>(
         <h1>{props.children}</h1>
      )
@@ -57,7 +67,7 @@
         );
     }
  
-      const MainCard=({src,alt,width })=>{
+      const MainCard=({mainCardImgSrc,alt,width })=>{
         function handleHeartClick(){
           console.log("하트 눌렀음");
         }
@@ -68,13 +78,11 @@
         return  (
           <div className="main-card">
           <img
-            src={src}
+            src={mainCardImgSrc}
             alt={alt}
             width={width}
           />
-          <button onClick={handleHeartClick}
-            onMouseOver={handleHeartMouseOver}
-          >🤍</button>
+          <button onClick={handleHeartClick}  onMouseOver={handleHeartMouseOver}   >🤍</button>
         </div>
         );
       }
@@ -99,11 +107,14 @@
       
       const App=()=>{
         const [counter ,setCounter ] =React.useState(1);
-          console.log("카우터" , counter);
+        const [mainCardImgSrc, setMainCardImgSrc] =React.useState(mainImageSrcArr[0]);
 
         function handleFormSubmit(e){
           e.preventDefault();
           setCounter(counter+1);
+          const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
+
+          setMainCardImgSrc(mainImageSrcArr[nIndex]);
           console.log("폼 전송 됨" ,counter , e.target.name.value);
         }
 
@@ -112,7 +123,7 @@
           <div>
             <Title>1번째 고양이 가라사대</Title>,
             <Form  handleFormSubmit={handleFormSubmit} />
-            <MainCard src="https://source.unsplash.com/random"   alt="alt"   width="400" />
+            <MainCard mainCardImgSrc={mainCardImgSrc}   alt="alt"   width="400" />
             <Favorites  />
           </div>
 
