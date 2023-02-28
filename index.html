@@ -39,7 +39,7 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="./utils.js"></script>
+
     
     <script type="text/babel">
     const mainImageSrcArr = [ "https://cataas.com/cat/HSENVDU4ZMqy7KQ0/says/react",
@@ -67,13 +67,8 @@
         );
     }
  
-      const MainCard=({mainCardImgSrc,alt,width })=>{
-        function handleHeartClick(){
-          console.log("하트 눌렀음");
-        }
-        function handleHeartMouseOver(){
-          console.log("하트 스쳐 지나감");
-        }
+      const MainCard=({mainCardImgSrc, handleHeartClick ,alt,width })=>{
+
 
         return  (
           <div className="main-card">
@@ -82,7 +77,7 @@
             alt={alt}
             width={width}
           />
-          <button onClick={handleHeartClick}  onMouseOver={handleHeartMouseOver}   >🤍</button>
+          <button onClick={handleHeartClick}   >🤍</button>
         </div>
         );
       }
@@ -95,16 +90,13 @@
         );
       }
 
-      function Favorites(){
-        const CAT1 = "https://cataas.com/cat/HSENVDU4ZMqy7KQ0/says/react";
-        const CAT2 = "https://cataas.com/cat/BxqL2EjFmtxDkAm2/says/inflearn";
-        const CAT3 = "https://cataas.com/cat/18MD6byVC1yKGpXp/says/JavaScript";
-        const cats=[CAT1,CAT2];
+      function Favorites({favorites}){
+        console.log(" favorites   " ,favorites);
 
          return (
             <ul className="favorites">
               {
-                cats.map(cat=>(
+                favorites.map(cat=>(
                   <CatItem img={cat} key={cat} />
                 ))
               }
@@ -113,6 +105,13 @@
       }
       
       const App=()=>{
+        const CAT1 = "https://cataas.com/cat/HSENVDU4ZMqy7KQ0/says/react";
+        const CAT2 = "https://cataas.com/cat/BxqL2EjFmtxDkAm2/says/inflearn";
+        const CAT3 = "https://cataas.com/cat/18MD6byVC1yKGpXp/says/JavaScript";
+
+        const cats= [CAT1,CAT2];
+
+        const [favorites , setFavorites]=React.useState(cats);
         const [counter ,setCounter ] =React.useState(1);
         const [mainCardImgSrc, setMainCardImgSrc] =React.useState(mainImageSrcArr[0]);
 
@@ -125,19 +124,26 @@
           console.log("폼 전송 됨" ,counter , e.target.name.value);
         }
 
+        function handleHeartClick(){
+          console.log("하트 눌렀음");
+          setFavorites([...favorites, CAT3])
+        }
 
         return(
           <div>
             <Title>1번째 고양이 가라사대</Title>,
             <Form  handleFormSubmit={handleFormSubmit} />
-            <MainCard mainCardImgSrc={mainCardImgSrc}   alt="alt"   width="400" />
-            <Favorites  />
+            <MainCard mainCardImgSrc={mainCardImgSrc}  handleHeartClick={handleHeartClick} alt="alt"   width="400" />
+            <Favorites  favorites={favorites} />
           </div>
 
         )
 
       }
-     
+    
+      18 배웠던 개념 조합해서 기능 추가 (상태, prop, 이벤트, 리스트)
+
+      
       const 여기다가그려=document.querySelector("#app");
        ReactDOM.createRoot(여기다가그려).render(<App />);
     </script>
