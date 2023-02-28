@@ -57,7 +57,7 @@
      )
 
 
-    const Form=({counter , setCounter, setMainCardImgSrc })=>{
+    const Form=({updateMainCat })=>{
       
        const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
        const [value, setValue] =React.useState("");
@@ -78,11 +78,9 @@
           setErrorMessage("");
           if(value===''){
             setErrorMessage("빈값으로 만들 수 없습니다.");
+            return;
           }
-          setCounter(counter+1);
-          const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
-          setMainCardImgSrc(mainImageSrcArr[nIndex]);
-          console.log("폼 전송 됨" ,counter , e.target.name.value);
+          updateMainCat();
         }
 
         return (
@@ -98,9 +96,7 @@
         );
     }
  
-      const MainCard=({mainCardImgSrc, handleHeartClick ,alt,width })=>{
-
-
+      const MainCard=({mainCardImgSrc, onHeartClick ,alt,width })=>{
         return  (
           <div className="main-card">
           <img
@@ -108,7 +104,7 @@
             alt={alt}
             width={width}
           />
-          <button onClick={handleHeartClick}   >🤍</button>
+          <button onClick={onHeartClick}   >🤍</button>
         </div>
         );
       }
@@ -122,13 +118,12 @@
       }
 
       function Favorites({favorites}){
-        console.log(" favorites   " ,favorites);
 
          return (
             <ul className="favorites">
               {
-                favorites.map(cat=>(
-                  <CatItem img={cat} key={cat} />
+                favorites.map((cat,index)=>(
+                  <CatItem img={cat} key={index} />
                 ))
               }
           </ul>
@@ -150,21 +145,26 @@
           e.preventDefault();
           setCounter(counter+1);
           const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
-
           setMainCardImgSrc(mainImageSrcArr[nIndex]);
-          console.log("폼 전송 됨" ,counter , e.target.name.value);
         }
 
-        function handleHeartClick(){
-          console.log("하트 눌렀음");
+        function onHeartClick(){
           setFavorites([...favorites, CAT3])
         }
+
+        function updateMainCat(){
+          setCounter(counter+1);
+          const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
+          setMainCardImgSrc(mainImageSrcArr[nIndex]);
+        
+        }
+
 
         return(
           <div>
             <Title>1번째 고양이 가라사대</Title>,
-            <Form  handleFormSubmit={handleFormSubmit}  counter={counter} setCounter={setCounter} setMainCardImgSrc={setMainCardImgSrc} />
-            <MainCard mainCardImgSrc={mainCardImgSrc}  handleHeartClick={handleHeartClick} alt="alt"   width="400" />
+            <Form   updateMainCat={updateMainCat} />
+            <MainCard mainCardImgSrc={mainCardImgSrc}  onHeartClick={onHeartClick} alt="alt"   width="400" />
             <Favorites  favorites={favorites} />
           </div>
 
