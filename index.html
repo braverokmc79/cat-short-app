@@ -58,10 +58,18 @@
 
 
     const Form=({handleFormSubmit})=>{
+       const [value, setValue] =React.useState("");
+
+       function handleInputChange(e){
+         setValue(e.target.value.toUpperCase()) ;
+       }
         return (
           <form onSubmit={handleFormSubmit}>
-            <input type="text" name="name" 
-              placeholder="영어 대사를 입력해주세요" />
+            <input type="text" name="name"   placeholder="영어 대사를 입력해주세요"  
+                value={value}
+                onChange={handleInputChange}
+            />
+             
             <button type="submit">생성</button>
           </form>
         );
@@ -141,9 +149,8 @@
 
       }
     
-      18 배웠던 개념 조합해서 기능 추가 (상태, prop, 이벤트, 리스트)
+     
 
-      
       const 여기다가그려=document.querySelector("#app");
        ReactDOM.createRoot(여기다가그려).render(<App />);
     </script>
