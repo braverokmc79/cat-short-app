@@ -42,12 +42,19 @@
 
     
     <script type="text/babel">
+      
+    const jsonLocalStorage = {
+      setItem: (key, value) => {
+        localStorage.setItem(key, JSON.stringify(value));
+      },
+      getItem: (key) => {
+        return JSON.parse(localStorage.getItem(key));
+      },
+    };
+
     const mainImageSrcArr = [ "https://cataas.com/cat/HSENVDU4ZMqy7KQ0/says/react",
-        "https://cataas.com/cat/BxqL2EjFmtxDkAm2/says/inflearn",
+        "https://cataas.com/cat/BxqL2EjFmtxDkAm2/says/inflearnn",
         "https://cataas.com/cat/18MD6byVC1yKGpXp/says/JavaScript",
-        "https://source.unsplash.com/random",
-        "http://placeimg.com/640/480/arch",
-        "http://placeimg.com/640/480/nature",
         "http://placeimg.com/640/480/animals"
     ]
   
@@ -137,8 +144,8 @@
 
         const cats= [CAT1,CAT2];
 
-        const [favorites , setFavorites]=React.useState(cats);
-        const [counter ,setCounter ] =React.useState(Number(localStorage.getItem("counter")));
+        const [favorites , setFavorites]=React.useState(jsonLocalStorage.getItem("favorites") ||  []);
+        const [counter ,setCounter ] =React.useState(jsonLocalStorage.getItem("counter"));
         const [mainCardImgSrc, setMainCardImgSrc] =React.useState(mainImageSrcArr[0]);
 
         function handleFormSubmit(e){
@@ -149,16 +156,17 @@
         }
 
         function onHeartClick(){
-          setFavorites([...favorites, CAT3])
+          const nextFavorites=[...favorites, mainCardImgSrc];
+          setFavorites(nextFavorites);
+          jsonLocalStorage.setItem("favorites", nextFavorites);
         }
 
         function updateMainCat(){
           const nextCounter =counter+1;
           setCounter(nextCounter);
-          localStorage.setItem("counter",nextCounter);
+          jsonLocalStorage.setItem("counter",nextCounter);
           const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
           setMainCardImgSrc(mainImageSrcArr[nIndex]);
-        
         }
 
 
@@ -169,12 +177,10 @@
             <MainCard mainCardImgSrc={mainCardImgSrc}  onHeartClick={onHeartClick} alt="alt"   width="400" />
             <Favorites  favorites={favorites} />
           </div>
-
         )
 
       }
     
-     
 
       const 여기다가그려=document.querySelector("#app");
        ReactDOM.createRoot(여기다가그려).render(<App />);
