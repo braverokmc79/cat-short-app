@@ -57,12 +57,34 @@
      )
 
 
-    const Form=({handleFormSubmit})=>{
+    const Form=({counter , setCounter, setMainCardImgSrc })=>{
+      
+       const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
        const [value, setValue] =React.useState("");
+       const [errorMessage  , setErrorMessage] =React.useState("");
+
 
        function handleInputChange(e){
-         setValue(e.target.value.toUpperCase()) ;
+          const useValue=e.target.value;
+          setErrorMessage("");
+          if(includesHangul(useValue)){
+            setErrorMessage("한글은 입력할 수 없습니다.");
+          }
+          setValue(e.target.value.toUpperCase()) ;
        }
+
+       function handleFormSubmit(e){
+          e.preventDefault();
+          setErrorMessage("");
+          if(value===''){
+            setErrorMessage("빈값으로 만들 수 없습니다.");
+          }
+          setCounter(counter+1);
+          const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
+          setMainCardImgSrc(mainImageSrcArr[nIndex]);
+          console.log("폼 전송 됨" ,counter , e.target.name.value);
+        }
+
         return (
           <form onSubmit={handleFormSubmit}>
             <input type="text" name="name"   placeholder="영어 대사를 입력해주세요"  
@@ -71,6 +93,7 @@
             />
              
             <button type="submit">생성</button>
+            <p style={{color:"red"}}>{errorMessage}</p>
           </form>
         );
     }
@@ -140,7 +163,7 @@
         return(
           <div>
             <Title>1번째 고양이 가라사대</Title>,
-            <Form  handleFormSubmit={handleFormSubmit} />
+            <Form  handleFormSubmit={handleFormSubmit}  counter={counter} setCounter={setCounter} setMainCardImgSrc={setMainCardImgSrc} />
             <MainCard mainCardImgSrc={mainCardImgSrc}  handleHeartClick={handleHeartClick} alt="alt"   width="400" />
             <Favorites  favorites={favorites} />
           </div>
