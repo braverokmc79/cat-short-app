@@ -201,9 +201,11 @@
           setMainCardImgSrc(img);
         }
 
+        const counterTitle =counter===null ? "" : counter +"번째 ";
+
         return(
           <div>
-            <Title>{counter}번째 고양이 가라사대</Title>,
+            <Title>{counterTitle} 고양이 가라사대</Title>,
             <Form   updateMainCat={updateMainCat} />
             <MainCard alreadyFavorite={alreadyFavorite} mainCardImgSrc={mainCardImgSrc}  onHeartClick={onHeartClick} alt="alt"   width="400" />
             <Favorites  favorites={favorites} />
