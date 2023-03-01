@@ -57,16 +57,22 @@
         "https://cataas.com/cat/18MD6byVC1yKGpXp/says/JavaScript",
     ]
   
+    const fetchCat = async (text) => {
+        const OPEN_API_DOMAIN = "https://cataas.com";
+        const response = await fetch(`${OPEN_API_DOMAIN}/cat/says/${text}?json=true`);
+        const responseJson = await response.json();
+        return `${OPEN_API_DOMAIN}/${responseJson.url}`;
+    };
  
      const Title= (props)=>(
         <h1>{props.children}</h1>
      )
 
 
-    const Form=({updateMainCat })=>{
-      
+     //Form 폼 시작
+     const Form=({updateMainCat })=>{
+        const [value, setValue] =React.useState("");
        const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
-       const [value, setValue] =React.useState("");
        const [errorMessage  , setErrorMessage] =React.useState("");
 
 
@@ -86,7 +92,8 @@
             setErrorMessage("빈값으로 만들 수 없습니다.");
             return;
           }
-          updateMainCat();
+          //업데이트 하기
+          updateMainCat(value);
         }
 
         return (
@@ -101,6 +108,7 @@
           </form>
         );
     }
+   //Form 폼 끝
  
       const MainCard=({mainCardImgSrc, onHeartClick ,alt,width })=>{
         return  (
@@ -110,7 +118,7 @@
             alt={alt}
             width={width}
           />
-          <button onClick={onHeartClick}   >🤍</button>
+          <button onClick={onHeartClick}  >🤍</button>
         </div>
         );
       }
@@ -140,18 +148,16 @@
         const CAT1 = "https://cataas.com/cat/HSENVDU4ZMqy7KQ0/says/react";
         const CAT2 = "https://cataas.com/cat/BxqL2EjFmtxDkAm2/says/inflearn";
         const CAT3 = "https://cataas.com/cat/18MD6byVC1yKGpXp/says/JavaScript";
-
         const cats= [CAT1,CAT2];
-
         const [favorites , setFavorites]=React.useState(jsonLocalStorage.getItem("favorites") ||  []);
         const [counter ,setCounter ] =React.useState(jsonLocalStorage.getItem("counter"));
         const [mainCardImgSrc, setMainCardImgSrc] =React.useState(mainImageSrcArr[0]);
+       
 
         function handleFormSubmit(e){
           e.preventDefault();
           setCounter(counter+1);
           const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
-          setMainCardImgSrc(mainImageSrcArr[nIndex]);
         }
 
         function onHeartClick(){
@@ -160,14 +166,15 @@
           jsonLocalStorage.setItem("favorites", nextFavorites);
         }
 
-        function updateMainCat(){
+       async function updateMainCat(value){
           const nextCounter =counter+1;
           setCounter(nextCounter);
           jsonLocalStorage.setItem("counter",nextCounter);
           const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
-          setMainCardImgSrc(mainImageSrcArr[nIndex]);
+          //setMainCardImgSrc(mainImageSrcArr[nIndex]);
+          const img = await fetchCat(value);
+          setMainCardImgSrc(img);
         }
-
 
         return(
           <div>
@@ -179,7 +186,6 @@
         )
 
       }
-    
 
       const 여기다가그려=document.querySelector("#app");
        ReactDOM.createRoot(여기다가그려).render(<App />);
