@@ -108,9 +108,14 @@
           </form>
         );
     }
-   //Form 폼 끝
- 
-      const MainCard=({mainCardImgSrc, onHeartClick ,alt,width })=>{
+  
+    //Form 폼 끝 
+      const MainCard=({alreadyFavorite, mainCardImgSrc, onHeartClick ,alt,width })=>{
+        const EMPTY_HEART = "🤍";
+        const FULL_HEART = "💖";    
+
+        const heartIcon =alreadyFavorite ? FULL_HEART:  EMPTY_HEART;
+        
         return  (
           <div className="main-card">
           <img
@@ -118,7 +123,7 @@
             alt={alt}
             width={width}
           />
-          <button onClick={onHeartClick}  >🤍</button>
+          <button onClick={onHeartClick}  >{heartIcon}</button>
         </div>
         );
       }
@@ -132,6 +137,11 @@
       }
 
       function Favorites({favorites}){
+        if(favorites.length===0){
+          return <div>
+               사진 위 하트를 눌러 고양이 사진을 저장해봐요!
+            </div>
+        }
 
          return (
             <ul className="favorites">
@@ -151,8 +161,23 @@
         const cats= [CAT1,CAT2];
         const [favorites , setFavorites]=React.useState(jsonLocalStorage.getItem("favorites") ||  []);
         const [counter ,setCounter ] =React.useState(jsonLocalStorage.getItem("counter"));
-        const [mainCardImgSrc, setMainCardImgSrc] =React.useState(mainImageSrcArr[0]);
+        const [mainCardImgSrc, setMainCardImgSrc] =React.useState("");
+        const  alreadyFavorite =  favorites.includes(mainCardImgSrc);
+
+        async function setInitialCat(){
+          const newCat=await fetchCat("First cat ");
+          console.log(newCat);
+          setMainCardImgSrc(newCat);
+        }
+   
+
+        React.useEffect(()=>{
+            setInitialCat();
+        }, []);
+
+
        
+
 
         function handleFormSubmit(e){
           e.preventDefault();
@@ -180,7 +205,7 @@
           <div>
             <Title>{counter}번째 고양이 가라사대</Title>,
             <Form   updateMainCat={updateMainCat} />
-            <MainCard mainCardImgSrc={mainCardImgSrc}  onHeartClick={onHeartClick} alt="alt"   width="400" />
+            <MainCard alreadyFavorite={alreadyFavorite} mainCardImgSrc={mainCardImgSrc}  onHeartClick={onHeartClick} alt="alt"   width="400" />
             <Favorites  favorites={favorites} />
           </div>
         )
