@@ -159,8 +159,12 @@
         const CAT2 = "https://cataas.com/cat/BxqL2EjFmtxDkAm2/says/inflearn";
         const CAT3 = "https://cataas.com/cat/18MD6byVC1yKGpXp/says/JavaScript";
         const cats= [CAT1,CAT2];
-        const [favorites , setFavorites]=React.useState(jsonLocalStorage.getItem("favorites") ||  []);
-        const [counter ,setCounter ] =React.useState(jsonLocalStorage.getItem("counter"));
+        const [favorites , setFavorites]=React.useState(()=>{
+            return jsonLocalStorage.getItem("favorites") ||  [];
+        });
+        const [counter ,setCounter ] =React.useState(()=>{
+          return jsonLocalStorage.getItem("counter")
+        });
         const [mainCardImgSrc, setMainCardImgSrc] =React.useState("");
         const  alreadyFavorite =  favorites.includes(mainCardImgSrc);
 
@@ -192,13 +196,18 @@
         }
 
        async function updateMainCat(value){
-          const nextCounter =counter+1;
-          setCounter(nextCounter);
-          jsonLocalStorage.setItem("counter",nextCounter);
-          const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
+          //const nIndex= Math.floor(Math.random()* mainImageSrcArr.length);
           //setMainCardImgSrc(mainImageSrcArr[nIndex]);
           const img = await fetchCat(value);
           setMainCardImgSrc(img);
+
+        
+          setCounter((prev)=>{
+            const nextCounter =prev+1;
+            jsonLocalStorage.setItem("counter",nextCounter);
+            return nextCounter;
+          });
+         
         }
 
         const counterTitle =counter===null ? "" : counter +"번째 ";
